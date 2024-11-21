@@ -5,13 +5,13 @@
   "httpMethod": "GET",
   "isBase64Encoded": false,
   "queryStringParameters": {
-    "foo": "bar"
+    "query": "{kanbanTasksList{title, description}}"
   },
   "pathParameters": {
     "proxy": "/path/to/resource"
   },
   "stageVariables": {
-    "baz": "qux"
+    "query": "goodbye"
   },
   "headers": {
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",

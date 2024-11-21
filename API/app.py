@@ -1,13 +1,25 @@
 import json
-from graphene import ObjectType, String, Schema
+from graphene import ObjectType, String, Schema, List
+import boto3
+import os
+
+class KanbanTask(ObjectType):
+    title = String()
+    description = String()
+    status = String()  # Example: "To Do", "In Progress", "Done"
 
 class Query(ObjectType):
-    # this defines a Field `hello` in our Schema with a single Argument `name`
+    kanbanTasksList = List(KanbanTask)
     hello = String(name=String(default_value="stranger"))
     goodbye = String()
-
-    # our Resolver method takes the GraphQL context (root, info) as well as
-    # Argument (name) for the Field and returns data for the query Response
+    
+    def resolve_kanbanTasksList(root, info):
+        try: 
+            response = table.scan()
+            return response['Items']
+        except Exception as e:
+            print(f"Error scanning table: {str(e)}")
+    
     def resolve_hello(root, info, name):
         return f'Hello {name}!'
 
@@ -15,11 +27,16 @@ class Query(ObjectType):
         return 'See ya!'
 
 schema = Schema(query=Query)
+dynamodb = boto3.resource('dynamodb')
 
 def lambda_handler(event, context):
+    
+    global table
+    table = dynamodb.Table(os.environ['DYNAMODB_TABLE'])
+    
     result = schema.execute(event["queryStringParameters"]['query'])
 
     return {
         'statusCode': 200,
-        'body': json.dumps(result.data['hello'])
+        'body': json.dumps(result.data)
     }

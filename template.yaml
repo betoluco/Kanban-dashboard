@@ -1,28 +1,94 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  kanbanBoard
+  Creates a Lambada function that can queries a DynamoDB table 
 
-  Sample SAM Template for kanbanBoard
-
-# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
     Timeout: 3
     MemorySize: 128
+    
+    
+Parameters:
+  Project:
+    Type: String
+    Default: GraphQL
+    Description: Name of the project. Used in the tags.
 
 Resources:
+  GraphQLFunctionRole:
+    Type: AWS::IAM::Role
+    Properties: 
+      Description: Allows permission to scan the DynamoDB table.
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          -
+            Sid: AllowLambdaServiceToAssumeRole
+            Effect: Allow
+            Action: 
+              - sts:AssumeRole
+            Principal:
+              Service: 
+                - lambda.amazonaws.com
+      Policies:
+        -
+          PolicyName: GraphQLFunctionPolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              Effect: Allow
+              Action: 
+                - dynamodb:Scan
+              Resource: 
+                - !GetAtt TasksDynamoDBTable.Arn
+
   GraphQLFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function 
     Properties:
+      FunctionName:
+        !Sub
+        - ${Project}-query-function-${Id}
+        - Project: !Ref Project
+          Id: !Select [4, !Split ['-', !Select [2, !Split ['/', !Ref AWS::StackId]]]] 
       CodeUri: API/
       Handler: app.lambda_handler
       Runtime: python3.9
+      Role: !GetAtt GraphQLFunctionRole.Arn
       Architectures:
         - x86_64
+      Description: API endpoint that queries DynamoDB 
+      Environment:
+        Variables:
+          DYNAMODB_TABLE: !Ref TasksDynamoDBTable
       Events:
         HelloWorld:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Type: Api
           Properties:
             Path: /
             Method: any
+            
+  TasksDynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties: 
+      TableName:
+        !Sub
+        - ${Project}-tasks-table-${Id}
+        - Project: !Ref Project
+          Id: !Select [4, !Split ['-', !Select [2, !Split ['/', !Ref AWS::StackId]]]]
+      AttributeDefinitions:
+        -
+          AttributeName: PK
+          AttributeType: S
+      KeySchema: 
+        - 
+          AttributeName: PK
+          KeyType: HASH
+      ProvisionedThroughput: 
+        ReadCapacityUnits: 30
+        WriteCapacityUnits: 30
+      Tags:
+        - Key: Project
+          Value: !Ref Project
