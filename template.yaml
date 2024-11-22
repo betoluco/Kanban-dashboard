@@ -42,6 +42,7 @@ Resources:
               Effect: Allow
               Action: 
                 - dynamodb:Scan
+                - dynamodb:PutItem
               Resource: 
                 - !GetAtt TasksDynamoDBTable.Arn
 
