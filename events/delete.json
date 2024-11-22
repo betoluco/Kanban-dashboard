@@ -5,7 +5,7 @@
   "httpMethod": "GET",
   "isBase64Encoded": false,
   "queryStringParameters": {
-    "query": "mutation testMutation {createKanbanTask(PK: \"test2\", title:\"3 put item\", description:\"test put item\") {kanbanTask {PK, SK, title, description}ok}}"
+    "query": "mutation testMutation {deleteKanbanTask(PK: \"test4\", SK:\"2024-11-22 20:36:35.889639\") {ok}}"
   },
   "pathParameters": {
     "proxy": "/path/to/resource"
