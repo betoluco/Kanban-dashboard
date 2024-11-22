@@ -5,7 +5,7 @@
   "httpMethod": "GET",
   "isBase64Encoded": false,
   "queryStringParameters": {
-    "query": "{kanbanTasksList{title, description}}"
+    "query": "{kanbanTasksList{title, description, SK, PK}}"
   },
   "pathParameters": {
     "proxy": "/path/to/resource"
