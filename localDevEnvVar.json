@@ -1,0 +1,5 @@
+{
+    "GraphQLFunction":{
+      "DYNAMODB_TABLE": "GraphQL-tasks-table-0e1173392d2d"
+    }
+}
