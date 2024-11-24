@@ -66,11 +66,24 @@ Resources:
         Variables:
           DYNAMODB_TABLE: !Ref TasksDynamoDBTable
       Events:
-        HelloWorld:
+        ApiEvent:
           Type: Api
           Properties:
             Path: /
             Method: any
+            RestApiId:
+              Ref: ApiGatewayApi
+    
+  ApiGatewayApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: graphql
+      Cors:
+        AllowMethods: "'POST, GET'"
+        AllowHeaders: "'Content-Type'"
+        AllowOrigin: "'*'"
+      EndpointConfiguration:
+        Type: REGIONAL
             
   TasksDynamoDBTable:
     Type: AWS::DynamoDB::Table
