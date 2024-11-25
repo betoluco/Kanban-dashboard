@@ -64,7 +64,8 @@ Resources:
       Description: API endpoint that queries DynamoDB 
       Environment:
         Variables:
-          DYNAMODB_TABLE: !Ref TasksDynamoDBTable
+          TASKS_TABLE: !Ref TasksDynamoDBTable
+          CATEGORY_TABLE: !Ref CategoriesDynamoDBTable
       Events:
         ApiEvent:
           Type: Api
@@ -95,18 +96,41 @@ Resources:
           Id: !Select [4, !Split ['-', !Select [2, !Split ['/', !Ref AWS::StackId]]]]
       AttributeDefinitions:
         -
-          AttributeName: PK
+          AttributeName: category
           AttributeType: S
         - 
-          AttributeName: SK
+          AttributeName: datetime
           AttributeType: S
       KeySchema: 
         - 
-          AttributeName: PK
+          AttributeName: category
           KeyType: HASH
         - 
-          AttributeName: SK
+          AttributeName: datetime
           KeyType: RANGE
+      ProvisionedThroughput: 
+        ReadCapacityUnits: 30
+        WriteCapacityUnits: 30
+      Tags:
+        - Key: Project
+          Value: !Ref Project
+          
+  CategoriesDynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties: 
+      TableName:
+        !Sub
+        - ${Project}-categories-table-${Id}
+        - Project: !Ref Project
+          Id: !Select [4, !Split ['-', !Select [2, !Split ['/', !Ref AWS::StackId]]]]
+      AttributeDefinitions:
+        -
+          AttributeName: name
+          AttributeType: S
+      KeySchema: 
+        - 
+          AttributeName: name
+          KeyType: HASH
       ProvisionedThroughput: 
         ReadCapacityUnits: 30
         WriteCapacityUnits: 30

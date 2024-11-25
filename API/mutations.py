@@ -10,28 +10,28 @@ dynamodb = boto3.client('dynamodb')
 
 class CreateKanbanTask(graphene.Mutation):
     class Arguments:
-        PK = graphene.String()
+        category = graphene.String()
         title = graphene.String()
         description = graphene.String()
     
     ok = graphene.Boolean()
     kanban_task = graphene.Field(lambda: KanbanTask)
     
-    def mutate(root, info, PK, title, description):
-        SK = str(datetime.now())
+    def mutate(root, info, category, title, description):
+        now = str(datetime.now())
         try:
             response = dynamodb.put_item(
-                TableName=os.environ['DYNAMODB_TABLE'],
+                TableName=os.environ['TASKS_TABLE'],
                 Item={
-                    'PK': {'S': PK},
-                    'SK': {'S': SK},
+                    'category': {'S': category},
+                    'datetime': {'S': now},
                     'title': {'S': title},
                     'description': {'S': description}
                 }
             )
             kanban_task = KanbanTask(
-                PK=PK,
-                SK=SK,
+                category=category,
+                datetime=datetime,
                 title=title, 
                 description=description, 
             )
@@ -43,18 +43,18 @@ class CreateKanbanTask(graphene.Mutation):
             
 class DeleteKanbanTask(graphene.Mutation):
     class Arguments:
-        PK = graphene.String()
-        SK = graphene.String()
+        category = graphene.String()
+        datetime = graphene.String()
     
     ok = graphene.Boolean()
     
-    def mutate(root, info, PK, SK):
+    def mutate(root, info, category, datetime):
         try:
             response = dynamodb.delete_item(
-                TableName=os.environ['DYNAMODB_TABLE'], 
+                TableName=os.environ['TASKS_TABLE'], 
                 Key={
-                    'PK': {'S': PK}, 
-                    'SK': {'S': SK}
+                    'category': {'S': category}, 
+                    'datetime': {'S': datetime}
                 }
             )
             ok = True

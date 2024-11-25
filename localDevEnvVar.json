@@ -1,5 +1,6 @@
 {
     "GraphQLFunction":{
-      "DYNAMODB_TABLE": "GraphQL-tasks-table-0afff823d8d9"
+      "TASKS_TABLE": "GraphQL-tasks-table-0affe598bc87",
+      "CATEGORY_TABLE": "GraphQL-categories-table-0affe598bc87"
     }
 }

@@ -1,7 +1,7 @@
 import graphene
 
 class KanbanTask(graphene.ObjectType):
-    PK =  graphene.String()
-    SK =  graphene.String()
+    category =  graphene.String()
+    datetime =  graphene.String()
     title = graphene.String()
     description = graphene.String()

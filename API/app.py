@@ -8,7 +8,7 @@ schema = graphene.Schema(query=Query, mutation=KanbanTaskMutation)
 
 def lambda_handler(event, context):
     result = schema.execute(json.loads(event['body'])['query'])
-
+    
     return {
         'statusCode': 200,
         'headers': {
