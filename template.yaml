@@ -46,6 +46,7 @@ Resources:
                 - dynamodb:DeleteItem
               Resource: 
                 - !GetAtt TasksDynamoDBTable.Arn
+                - !GetAtt CategoriesDynamoDBTable.Arn
 
   GraphQLFunction:
     Type: AWS::Serverless::Function 
