@@ -1,6 +1,6 @@
 {
     "GraphQLFunction":{
       "TASKS_TABLE": "GraphQL-tasks-table-0affe598bc87",
-      "CATEGORY_TABLE": "GraphQL-categories-table-0affe598bc87"
+      "CATEGORIES_TABLE": "GraphQL-categories-table-0affe598bc87"
     }
 }

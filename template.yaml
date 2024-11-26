@@ -65,7 +65,7 @@ Resources:
       Environment:
         Variables:
           TASKS_TABLE: !Ref TasksDynamoDBTable
-          CATEGORY_TABLE: !Ref CategoriesDynamoDBTable
+          CATEGORIES_TABLE: !Ref CategoriesDynamoDBTable
       Events:
         ApiEvent:
           Type: Api

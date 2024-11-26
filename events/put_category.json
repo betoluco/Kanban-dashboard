@@ -1,6 +1,6 @@
 {
-  "body": "{\"query\": \"{kanbanTasksList{title, description, category, datetime} kanbanCategoriesList{name}}\"}",
-  "httpMethod": "GET",
+  "body": "{\"query\": \"mutation { createKanbanCategory(name: \\\"test1\\\") { kanbanCategory { name } ok } }\"}",
+  "httpMethod": "POST",
   "headers": {
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
     "Host": "1234567890.execute-api.us-east-1.amazonaws.com",

@@ -61,7 +61,4 @@ class DeleteKanbanTask(graphene.Mutation):
             return DeleteKanbanTask(ok=ok)
         except Exception as e:
             print(f"Error scanning table: {str(e)}")
-
-class KanbanTaskMutation(graphene.ObjectType):
-    create_kanban_task = CreateKanbanTask.Field()
-    delete_kanban_task = DeleteKanbanTask.Field()
+            
