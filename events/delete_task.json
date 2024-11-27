@@ -1,5 +1,5 @@
 {
-  "body": "{\"query\": \"mutation { deleteKanbanTask(category: \\\"test1\\\", datetime: \\\"2024-11-25 21:59:58.090851\\\") { ok } }\"}",
+  "body": "{\"query\": \"mutation DeleteKanbanTask($category: String!, $id: ID!) { deleteKanbanTask(category: $category, id: $id,) { kanbanTask { category id } ok } }\", \"variables\": {\"category\": \"the category\", \"id\": \"2024-11-27 19:08:40.067078\"}}",
   "httpMethod": "POST",
   "headers": {
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",

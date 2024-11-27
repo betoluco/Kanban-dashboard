@@ -1,5 +1,5 @@
 {
-  "body": "{\"query\": \"mutation { createKanbanTask(category: \\\"test1\\\", title: \\\"3 put item\\\", description: \\\"test put item\\\") { kanbanTask { category datetime title description } ok } }\"}",
+  "body": "{\"query\": \"mutation CreateKanbanTask($category: String!, $title: String, $description: String) { createKanbanTask(category: $category, title: $title, description: $description) { kanbanTask { category id title description } ok } }\", \"variables\": {\"category\": \"the category\", \"title\": \"category title2\", \"description\": \"some description\"}}",
   "httpMethod": "POST",
   "headers": {
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",

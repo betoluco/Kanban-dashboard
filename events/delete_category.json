@@ -1,5 +1,5 @@
 {
-  "body": "{\"query\": \"mutation { deleteKanbanCategory(name: \\\"test1\\\") { ok } }\"}",
+  "body": "{\"query\": \"mutation DelteKanbanCategory($id: ID!) { deleteKanbanCategory(id: $id) {kanbanCategory {id} ok }}\", \"variables\": {\"id\": \"new category\"}}",
   "httpMethod": "POST",
   "headers": {
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",

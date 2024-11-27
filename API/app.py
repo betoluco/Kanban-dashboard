@@ -1,5 +1,6 @@
 import json
 import graphene
+import re
 
 from query import Query
 from task_mutations import CreateKanbanTask, DeleteKanbanTask
@@ -14,7 +15,13 @@ class KanbanTaskMutation(graphene.ObjectType):
 schema = graphene.Schema(query=Query, mutation=KanbanTaskMutation)
 
 def lambda_handler(event, context):
-    result = schema.execute(json.loads(event['body'])['query'])
+    body = json.loads(event['body'])
+    variables = {}                      #if the event has no a variables
+    if 'variables' in body:
+        variables = body['variables']
+    
+    result = schema.execute(body['query'], variable_values=variables)
+    
     if result.errors:
         print(result)
     return {

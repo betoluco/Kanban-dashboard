@@ -24,14 +24,14 @@ class CreateKanbanTask(graphene.Mutation):
                 TableName=os.environ['TASKS_TABLE'],
                 Item={
                     'category': {'S': category},
-                    'datetime': {'S': now},
+                    'id': {'S': now},
                     'title': {'S': title},
                     'description': {'S': description}
                 }
             )
             kanban_task = KanbanTask(
                 category=category,
-                datetime=datetime,
+                id=id,
                 title=title, 
                 description=description, 
             )
@@ -44,21 +44,26 @@ class CreateKanbanTask(graphene.Mutation):
 class DeleteKanbanTask(graphene.Mutation):
     class Arguments:
         category = graphene.String()
-        datetime = graphene.String()
+        id = graphene.ID()
     
     ok = graphene.Boolean()
+    kanban_task = graphene.Field(lambda: KanbanTask)
     
-    def mutate(root, info, category, datetime):
+    def mutate(root, info, category, id):
         try:
             response = dynamodb.delete_item(
                 TableName=os.environ['TASKS_TABLE'], 
                 Key={
                     'category': {'S': category}, 
-                    'datetime': {'S': datetime}
+                    'id': {'S': id}
                 }
             )
+            kanban_task = KanbanTask(
+                category=category,
+                id=id,
+            )
             ok = True
-            return DeleteKanbanTask(ok=ok)
+            return DeleteKanbanTask(kanban_task=kanban_task, ok=ok)
         except Exception as e:
             print(f"Error scanning table: {str(e)}")
             
